@@ -111,12 +111,16 @@ def create_model(session, forward_only):
       FLAGS.learning_rate, FLAGS.learning_rate_decay_factor,
       forward_only=forward_only,use_lstm=False)
   ckpt = tf.train.get_checkpoint_state(FLAGS.train_dir)
-  if ckpt and tf.gfile.Exists(ckpt.model_checkpoint_path):
+  print(ckpt)
+  print(tf.gfile.Exists(ckpt.model_checkpoint_path))
+  #if ckpt and tf.gfile.Exists(ckpt.model_checkpoint_path):
+  if ckpt:
     print("Reading model parameters from %s" % ckpt.model_checkpoint_path)
+    saver = tf.train.import_meta_graph(ckpt.model_checkpoint_path+'.meta')
     model.saver.restore(session, ckpt.model_checkpoint_path)
   else:
     print("Created model with fresh parameters.")
-    session.run(global_variables_initializer())
+    session.run(tf.global_variables_initializer())
   return model
 
 
@@ -236,6 +240,7 @@ def decode():
         outputs = outputs[:outputs.index(data_utils.EOS_ID)]
       # Print out Hindi word corresponding to outputs.
       print("".join([tf.compat.as_str(rev_hn_vocab[output]) for output in outputs]))
+      #print(outputs)
       print("> ", end="")
       sys.stdout.flush()
       word = sys.stdin.readline()

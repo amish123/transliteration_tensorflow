@@ -206,9 +206,8 @@ def data_to_token_ids(data_path, target_path, vocabulary_path,
           counter += 1
           if counter % 10000 == 0:
             print("  tokenizing line %d" % counter)
-          token_ids = word_to_token_ids(line, vocab, tokenizer,
-                                            normalize_digits)
-          tokens_file.write(" ".join([str(tok) for tok in token_ids]) + "\n")
+          token_ids = word_to_token_ids(line, vocab, tokenizer, normalize_digits)
+          tokens_file.write(" ".join([str(t) for t in token_ids]) + "\n")
 
 
 def prepare_rev_data(data_dir, en_vocabulary_size, hn_vocabulary_size, tokenizer=None):
